@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'Slave'
+        label 'SLAVE'
      }
     tools {
         maven 'M2_HOME'
