@@ -1,24 +1,24 @@
 pipeline {
-    agent any
+    agent {
+        label 'slave'
+    }
     tools {
         maven 'M2_HOME'
     }
     stages {
-        stage('checkout the project') {
+        stage('checkout from project') {
             steps {
-                git branch: 'main', url: 'https://github.com/cbabu85/java-maven-pipeline-lara.git'
+                git branch: 'main' , url: 'https://github.com/belosheabhijeet/java-maven-pipeline-jenkins.git'
             }
         }
         stage('Build the Package') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn test'
             }
         }
-        stage('Build Docker Image') {
+        stage('Deploying') {
             steps {
-                script {
-                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
-                }
+                deploy adapters: [tomcat9(credentialsId: '4bb61774-e910-48da-bb90-b7355e399918', path: '', url: 'http://35.154.17.110:8081/manager/html')], contextPath: null, war: '**/*.war'
             }
         }
     }
